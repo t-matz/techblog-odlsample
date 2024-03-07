@@ -1,0 +1,37 @@
+module odlsample {
+    yang-version 1.1;
+    namespace "urn:opendaylight:params:xml:ns:yang:odlsample";
+    prefix "odlsample";
+
+    revision "2024-03-04" { 
+        description "Initial revision of odlsample model";
+    }
+
+    grouping sample-grp {
+        list data-list {
+            key "id";
+            leaf id {
+                type string;
+            }
+            leaf name {
+                type string;
+            }
+            leaf comment {
+                type string;
+            }
+            leaf last-modified {
+                config false;
+                type string;
+            }
+        }
+    }
+    container sample {
+        uses sample-grp;
+    }
+
+    notification sample-notify {
+        leaf message {
+            type string;
+        }
+    }
+}
