@@ -20,13 +20,10 @@ import org.opendaylight.mdsal.binding.api.DataObjectModification;
 import org.opendaylight.mdsal.binding.api.DataTreeChangeListener;
 import org.opendaylight.mdsal.binding.api.DataTreeIdentifier;
 import org.opendaylight.mdsal.binding.api.DataTreeModification;
-import org.opendaylight.mdsal.binding.api.NotificationPublishService;
 import org.opendaylight.mdsal.binding.api.WriteTransaction;
 import org.opendaylight.mdsal.common.api.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.odlsample.rev240304.Sample;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.odlsample.rev240304.SampleBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.odlsample.rev240304.SampleNotify;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.odlsample.rev240304.SampleNotifyBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.odlsample.rev240304.sample.grp.DataList;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.odlsample.rev240304.sample.grp.DataListBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.odlsample.rev240304.sample.grp.DataListKey;
@@ -42,14 +39,12 @@ import org.slf4j.LoggerFactory;
 public final class OdlsampleProvider implements DataTreeChangeListener<Sample>, AutoCloseable {
 
     private final DataBroker dataBroker;
-    private final NotificationPublishService pubService;
     private final ListenerRegistration<OdlsampleProvider> registration;
     private static final Logger LOG = LoggerFactory.getLogger(OdlsampleProvider.class);
     private static final InstanceIdentifier<Sample> SAMPLE_PATH = InstanceIdentifier.create(Sample.class);
 
-    public OdlsampleProvider(DataBroker dataBroker, NotificationPublishService pubService) {
+    public OdlsampleProvider(DataBroker dataBroker) {
         this.dataBroker = dataBroker;
-        this.pubService = pubService;
         this.registration = this.dataBroker
                 .registerDataTreeChangeListener(
                         DataTreeIdentifier.create(LogicalDatastoreType.CONFIGURATION, SAMPLE_PATH), this);
@@ -80,9 +75,6 @@ public final class OdlsampleProvider implements DataTreeChangeListener<Sample>, 
             LOG.trace("change, {}", change);
             final DataObjectModification<Sample> root = change.getRootNode();
             updateData(wtx, root.getModifiedChildren());
-            // Chapter 3. notification
-            SampleNotify notify = new SampleNotifyBuilder().setMessage(root.getModificationType().name()).build();
-            this.pubService.offerNotification(notify);
         }
     }
 
