@@ -19,22 +19,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     class="jp.apresia.techblog.impl.OdlsampleProvider"
     init-method="init" destroy-method="close">
     <argument ref="dataBroker" />
-    <argument ref="pubService" />
   </bean>
-
-  <!-- Chapter 3. notification START -->
-  <reference id="notificationService"
-    interface="org.opendaylight.mdsal.binding.api.NotificationService" />
-
-  <reference id="pubService"
-    interface="org.opendaylight.mdsal.binding.api.NotificationPublishService" />
-
-
-  <bean id="listener"
-    class="jp.apresia.techblog.impl.SampleNotificationListener"
-    init-method="init" destroy-method="close">
-    <argument ref="notificationService" />
-  </bean>
-  <!-- Chapter 3. notification END -->
 
 </blueprint>

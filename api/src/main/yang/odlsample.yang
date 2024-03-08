@@ -28,10 +28,4 @@ module odlsample {
     container sample {
         uses sample-grp;
     }
-
-    notification sample-notify {
-        leaf message {
-            type string;
-        }
-    }
 }
